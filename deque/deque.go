@@ -1,10 +1,6 @@
 package deque
 
-import (
-	"cmp"
-)
-
-type Deque[T cmp.Ordered] struct {
+type Deque[T any] struct {
 	data []T
 }
 
