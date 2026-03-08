@@ -2,6 +2,8 @@ package deque
 
 import "fmt"
 
+const defaultCapacity = 8
+
 type Deque[T any] struct {
 	data []T
 	head int
@@ -10,21 +12,22 @@ type Deque[T any] struct {
 }
 
 // конструктор 2 в 1
-func NewDeque[T any](size1 ...int) *Deque[T] {
-	if len(size1) > 1 {
+func NewDeque[T any](capacity ...int) *Deque[T] {
+	if len(capacity) > 1 {
 		panic("NewDeque takes up to one argument.")
 	}
-	size0 := 8
-	if len(size1) > 0 && size1[0] > 0 {
-		size0 = size1[0]
+
+	newCap := defaultCapacity
+	if len(capacity) > 0 && capacity[0] > 0 {
+		newCap = capacity[0]
 	}
-	return &Deque[T]{data: make([]T, size0)}
+	return &Deque[T]{data: make([]T, newCap)}
 }
 
 // блок инициализации внутреннего среза
 func (d *Deque[T]) initBlock() {
 	if len(d.data) == 0 {
-		d.data = make([]T, 8)
+		d.data = make([]T, defaultCapacity)
 	}
 }
 
@@ -52,14 +55,16 @@ func (d *Deque[T]) Len() int {
 	return d.size
 }
 
-func (d *Deque[T]) String() string {
+func (d *Deque[T]) Values() []T {
 	res := make([]T, d.size)
-
 	for i := 0; i < d.size; i++ {
 		res[i] = d.data[(d.head+i)%len(d.data)]
 	}
+	return res
+}
 
-	return fmt.Sprint(res)
+func (d *Deque[T]) String() string {
+	return fmt.Sprint(d.Values())
 }
 
 // добавить в начало
