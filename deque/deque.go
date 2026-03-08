@@ -11,7 +11,7 @@ type Deque[T any] struct {
 	size int
 }
 
-// конструктор 2 в 1
+// NewDeque - конструктор 2 в 1
 func NewDeque[T any](capacity ...int) *Deque[T] {
 	if len(capacity) > 1 {
 		panic("NewDeque takes up to one argument.")
@@ -24,19 +24,19 @@ func NewDeque[T any](capacity ...int) *Deque[T] {
 	return &Deque[T]{data: make([]T, newCap)}
 }
 
-// блок инициализации внутреннего среза
+// initBlock - блок инициализации внутреннего среза
 func (d *Deque[T]) initBlock() {
 	if len(d.data) == 0 {
 		d.data = make([]T, defaultCapacity)
 	}
 }
 
-// проверка пустой структуры
+// IsEmpty - проверка пустой структуры
 func (d *Deque[T]) IsEmpty() bool {
 	return d.size == 0
 }
 
-// функция увелечения вложенного среза
+// grow - увелечение вложенного среза
 func (d *Deque[T]) grow() {
 	if d.size < len(d.data) {
 		return
@@ -51,10 +51,12 @@ func (d *Deque[T]) grow() {
 	d.tail = d.size
 }
 
+// Len - длина внутренней абстракции
 func (d *Deque[T]) Len() int {
 	return d.size
 }
 
+// Values - возвращает срез внутренней абстракции
 func (d *Deque[T]) Values() []T {
 	res := make([]T, d.size)
 	for i := 0; i < d.size; i++ {
@@ -63,11 +65,12 @@ func (d *Deque[T]) Values() []T {
 	return res
 }
 
+// Values - возвращает текстовое представление внутренней абстракции
 func (d *Deque[T]) String() string {
 	return fmt.Sprint(d.Values())
 }
 
-// добавить в начало
+// PushFront - добавить в начало абстракции
 func (d *Deque[T]) PushFront(val T) {
 	d.initBlock()
 	d.grow()
@@ -77,7 +80,7 @@ func (d *Deque[T]) PushFront(val T) {
 	d.size++
 }
 
-// добавить в конец
+// PushBack - добавить в конец абстракции
 func (d *Deque[T]) PushBack(val T) {
 	d.initBlock()
 	d.grow()
@@ -87,7 +90,7 @@ func (d *Deque[T]) PushBack(val T) {
 	d.size++
 }
 
-// взять из начала
+// PopFront - взять из начала абстракции
 func (d *Deque[T]) PopFront() (T, bool) {
 	var nul T
 	if d.size == 0 {
@@ -102,7 +105,7 @@ func (d *Deque[T]) PopFront() (T, bool) {
 	return val, true
 }
 
-// взять из конца
+// PopBack - взять из конца абстракции
 func (d *Deque[T]) PopBack() (T, bool) {
 	var nul T
 	if d.size == 0 {
