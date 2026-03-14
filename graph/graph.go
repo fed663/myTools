@@ -51,3 +51,24 @@ func (g *Graph[T]) DFSStack(start T) {
 		}
 	}
 }
+
+func (g *Graph[T]) BFS(start T) {
+	marked := make(map[T]bool)
+	g.bfs(start, marked)
+}
+
+func (g *Graph[T]) bfs(start T, marked map[T]bool) {
+	deq := deque.NewDeque[T]()
+	deq.PushBack(start)
+	for deq.Len() > 0 {
+		u, _ := deq.PopFront()
+		if !marked[u] {
+			marked[u] = true
+			for _, w := range g.adj[u] {
+				if !marked[w] {
+					deq.PushBack(w)
+				}
+			}
+		}
+	}
+}
